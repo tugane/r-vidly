@@ -1,15 +1,25 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import NewRentals from "../components/rentals/NewRentals";
+import RentalsList from "../components/rentals/RentalsList";
 
 function Rentals() {
   const [movies, setMovies] = useState([]);
   const [customers, setCustomers] = useState([]);
+  const [rentals, setRentals] = useState([]);
 
   useEffect(() => {
     getMovies();
+    getRentals();
     getCustomers();
   }, []);
+
+  const getRentals = () => {
+    axios
+      .get("http://127.0.0.1:8000/api/rentals")
+      .then((response) => setRentals(response.data.data))
+      .catch((err) => console.log(err));
+  };
   const getMovies = () => {
     axios
       .get("http://127.0.0.1:8000/api/movies?all")
@@ -27,13 +37,14 @@ function Rentals() {
       <NewRentals
         customers={customers}
         movies={movies}
-        onReload={() => getCustomers()}
+        onReload={() => getRentals()}
       />
-      {/* <CustomersList
+      <RentalsList
+        movies={movies}
         customers={customers}
-        memberships={memberships}
-        onReload={() => getCustomers()}
-      /> */}
+        rentals={rentals}
+        onReload={() => getRentals()}
+      />
     </div>
   );
 }

@@ -69,6 +69,15 @@ function NewRentals({ movies, customers, onReload }) {
     });
   };
 
+  const getIds = (values) => {
+    let newValues = [];
+    values.forEach((element) => {
+      newValues.push(element.value);
+    });
+    console.log(newValues);
+    return newValues;
+  };
+
   return (
     <div className="col-md-8 mx-auto my-2 p-3">
       <Button onClick={handleShow} text="New"></Button>
@@ -78,22 +87,6 @@ function NewRentals({ movies, customers, onReload }) {
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={handleSubmit}>
-            <div>
-              <label className="form-label">Movie</label>
-              <Select
-                options={options}
-                isMulti={true}
-                onChange={(values) => (
-                  setValues({
-                    customer_id: values.customer_id,
-                    movie: values,
-                  }),
-                  setErrors({ customer_id: errors.customer_id, movie: null })
-                )}
-                name="movie"
-              />
-              <ErrorMessage name="movie" touched={touched} errors={errors} />
-            </div>
             <div>
               <label className="form-label">Customer</label>
               <select
@@ -117,7 +110,22 @@ function NewRentals({ movies, customers, onReload }) {
                 errors={errors}
               />
             </div>
-
+            <div>
+              <label className="form-label">Movie</label>
+              <Select
+                options={options}
+                isMulti={true}
+                onChange={(selectedMovies) => (
+                  setValues({
+                    customer_id: values.customer_id,
+                    movie: getIds(selectedMovies),
+                  }),
+                  setErrors({ customer_id: errors.customer_id, movie: null })
+                )}
+                name="movie"
+              />
+              <ErrorMessage name="movie" touched={touched} errors={errors} />
+            </div>
             <Button loading={isSubmitting} />
           </form>
         </Modal.Body>
